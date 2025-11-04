@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54.09" height="35.5" viewBox="0 0 54.09 35.5">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Path_7" data-name="Path 7" d="M0,0V35.5H54.09V0Z"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <path id="Path_4" data-name="Path 4" d="M27.045,17.75H54.09V35.5Zm0,0V35.5H0Zm0,0H0V0Zm0,0V0H54.09Z"/>
+    </clipPath>
+  </defs>
+  <g id="flag_GBP" transform="translate(418.91 -95.004)">
+    <g id="Flag_of_the_United_Kingdom" transform="translate(-418.91 95.004)" clip-path="url(#clip-path)">
+      <path id="Path_1" data-name="Path 1" d="M0,0V35.5H54.09V0Z" fill="#012169"/>
+      <path id="Path_2" data-name="Path 2" d="M0,0,54.09,35.5m0-35.5L0,35.5" stroke="#fff" stroke-width="6"/>
+      <g id="Group_1" data-name="Group 1" clip-path="url(#clip-path-2)">
+        <path id="Path_3" data-name="Path 3" d="M0,0,54.09,35.5m0-35.5L0,35.5" stroke="#c8102e" stroke-width="4"/>
+      </g>
+      <path id="Path_5" data-name="Path 5" d="M27.045,0V35.5M0,17.75H54.09" stroke="#fff" stroke-width="10"/>
+      <path id="Path_6" data-name="Path 6" d="M27.045,0V35.5M0,17.75H54.09" stroke="#c8102e" stroke-width="6"/>
+    </g>
+  </g>
+</svg>
