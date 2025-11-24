@@ -6,7 +6,8 @@ import Filter from "@/components/DestinationOverview/Filter";
 import TravelPackages from "@/components/DestinationOverview/TravelPackages";
 import DestinationPackages from "@/components/DestinationData/DestinationPackages";
 
-const API_BASE = import.meta?.env?.VITE_API_BASE || "";
+// const API_BASE = import.meta?.env?.VITE_API_BASE || "";
+const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "");
 const RELATED_LOCATIONS = {
   kolkata: ['sundarbans', 'sunderbans', 'sundarban', 'west bengal', 'south 24 parganas'],
   // add more mappings as needed

@@ -36,7 +36,7 @@ const TrendingDestinations = () => {
           <div
             key={index}
             onClick={() => dest.slug && navigate(dest.slug)}
-            className="min-w-[8rem] sm:min-w-[10rem] md:w-48 cursor-pointer group"
+            className="min-w-[8rem] sm:min-w-[10rem] md:w-52 cursor-pointer group"
           >
             <div className="overflow-hidden rounded-2xl shadow-md">
               <img

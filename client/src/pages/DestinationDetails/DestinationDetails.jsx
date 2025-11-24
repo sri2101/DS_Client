@@ -11,19 +11,21 @@ import DurationInclusions from '@/components/DestinationDetails/DurationInclusio
 import { useState, useEffect } from 'react';
 import PackageTabs from '@/components/DestinationDetails/DestinationTabs';
 import DestinationPackages from '@/components/DestinationData/DestinationPackages';
+import EnquiryDialog from '@/components/DestinationDetails/EnquiryDialog';
 import React from 'react'
 
 export default function DestinationDetails() {
   const { state } = useLocation();
   const { packageSlug } = useParams();
   const [packageData, setPackageData] = useState(() => state?.trip || DestinationPackages.find((p) => p.slug === packageSlug));
+  const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "");
 
   useEffect(() => {
     let mounted = true;
     const loadIfNeeded = async () => {
       if (packageData) return; // already have it
       try {
-        const res = await fetch(`/api/v1/package/${packageSlug}`);
+        const res = await fetch(`${API_BASE}/api/v1/package/${packageSlug}`);
         if (!mounted) return;
         if (!res.ok) return; // keep fallback
         const body = await res.json();

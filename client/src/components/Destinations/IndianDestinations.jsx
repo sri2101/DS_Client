@@ -38,12 +38,14 @@ export default function IndianDestinations() {
 		],
 	};
 
+	
+
 	useEffect(() => {
 		let mounted = true;
 		const load = async () => {
 			try {
 				const base = import.meta.env.VITE_API_BASE || "";
-				const res = await fetch(`${base}/api/v1/package/all`);
+				const res = await fetch(`/api/v1/package/all`);
 				if (!mounted) return;
 				if (!res.ok) return setLoading(false);
 				const body = await res.json();

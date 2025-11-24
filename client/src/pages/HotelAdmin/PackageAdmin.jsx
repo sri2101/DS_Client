@@ -151,7 +151,9 @@ export default function PackageAdmin() {
   const [customInclusion, setCustomInclusion] = useState("");
   const [customExclusion, setCustomExclusion] = useState("");
 
-  const API_BASE = import.meta?.env?.VITE_API_BASE || "http://localhost:3000";
+  // const API_BASE = import.meta?.env?.VITE_API_BASE || "http://localhost:3000";
+  const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "");
+
 
   /** Fetch all packages */
   const fetchPackages = async () => {
@@ -815,6 +817,11 @@ export default function PackageAdmin() {
           console.log('FormData entry:', pair[0], pair[1]);
         }
       } catch (e) {}
+
+      for (const [key, value] of formData.entries()) {
+  console.log("FD:", key, value);
+}
+
 
       await axios({
         method,

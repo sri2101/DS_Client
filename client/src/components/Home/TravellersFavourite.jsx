@@ -59,7 +59,7 @@ const TravellersFavourite = () => {
                 className="w-full h-[200px] object-cover"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-3">
-                <p className="text-sm font-semibold">{place.name}</p>
+                <p className="text-xl font-semibold">{place.name}</p>
                 <p className="text-xs">
                   {place.nights} Nights / {place.days} Days
                 </p>

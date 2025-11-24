@@ -77,7 +77,7 @@ const TrustpilotSlider =() =>  {
                       ))}
                     </div>
                     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                      <ShieldCheck className="w-4 h-4 text-gray-400" />
+                      <ShieldCheck className="w-4 h-4 text-blue-400" />
                       <span>Verified</span>
                     </div>
                   </div>

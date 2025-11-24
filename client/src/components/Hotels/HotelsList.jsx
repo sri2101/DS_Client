@@ -262,22 +262,71 @@ const HotelsList = ({ destination, filtersState, searchParams, visible, setVisib
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = "http://localhost:3000/api/v1/hotel";
+  // const API_URL = "http://localhost:3000/api/v1/hotel";
+  // const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "");
 
-  useEffect(() => {
+//   useEffect(() => {
+//   const fetchHotels = async () => {
+//     try {
+//       setLoading(true);
+//       setError(null);
+
+//       if (!city) return;
+
+//       const response = await fetch(`${API_BASE}/location/${encodeURIComponent(city)}`);
+//       if (!response.ok) throw new Error("Failed to fetch hotels");
+//       const data = await response.json();
+//       setHotels(data?.data || []);
+//     } catch (err) {
+//       console.error("❌ Error fetching hotels:", err);
+//       setError(err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   fetchHotels();
+// }, [city]);
+
+
+useEffect(() => {
   const fetchHotels = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      if (!city) return;
+      console.log("🔍 [HotelsList] Destination city:", city);
 
-      const response = await fetch(`${API_URL}/location/${encodeURIComponent(city)}`);
-      if (!response.ok) throw new Error("Failed to fetch hotels");
+      if (!city) {
+        console.log("⛔ No city found. Skipping fetch.");
+        return;
+      }
+
+      const API_BASE = import.meta?.env?.VITE_API_BASE || "https://dsserver-delta.vercel.app";
+      const url = `${API_BASE}/api/v1/hotel/location/${encodeURIComponent(city)}`;
+
+      console.log("🌍 Fetching hotels from:", url);
+
+      const response = await fetch(url);
+
+      console.log("📥 Raw response:", response);
+
+      if (!response.ok) {
+        console.log("❌ Response NOT OK:", response.status, response.statusText);
+        throw new Error("Failed to fetch hotels");
+      }
+
       const data = await response.json();
-      setHotels(data?.data || []);
+
+      console.log("📦 Parsed response JSON:", data);
+
+      const hotelsData = data?.data || [];
+
+      console.log("🏨 Hotels received:", hotelsData.length, hotelsData);
+
+      setHotels(hotelsData);
     } catch (err) {
-      console.error("❌ Error fetching hotels:", err);
+      console.error("🔥 ERROR fetching hotels:", err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -286,6 +335,7 @@ const HotelsList = ({ destination, filtersState, searchParams, visible, setVisib
 
   fetchHotels();
 }, [city]);
+
 
 
   const filteredHotels = useMemo(() => {

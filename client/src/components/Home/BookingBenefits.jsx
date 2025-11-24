@@ -126,7 +126,7 @@ const BookingBenefits = () => {
               Discover the unrivalled benefits that promise memorable journeys all along.
             </p>
           </div>
-          <div className="flex items-center bg-green-50 border border-green-200 rounded-xl px-4 py-2 space-x-3 shadow-sm">
+          {/* <div className="flex items-center bg-green-50 border border-green-200 rounded-xl px-4 py-2 space-x-3 shadow-sm">
             <span className="font-medium text-lg">Great</span>
             <div className="flex space-x-1 text-green-600">
               {[...Array(4)].map((_, i) => (
@@ -136,7 +136,7 @@ const BookingBenefits = () => {
             </div>
             <span className="text-sm text-gray-700">13,308 reviews on</span>
             <span className="text-green-600 font-semibold">★ Trustpilot</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Benefits Grid */}

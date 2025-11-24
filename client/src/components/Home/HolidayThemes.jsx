@@ -49,7 +49,7 @@ const HolidayThemes = () => {
         {themes.map((theme, index) => (
           <div
             key={index}
-            className="rounded-full border border-blue-100 bg-blue-50 text-center p-8 w-[180px] h-[180px] flex flex-col items-center justify-center shadow-sm"
+            className="rounded-full border border-blue-100 bg-blue-50 text-center p-8 w-[203px] h-[203px] flex flex-col items-center justify-center shadow-sm"
           >
             <img
               src={theme.iconUrl}
