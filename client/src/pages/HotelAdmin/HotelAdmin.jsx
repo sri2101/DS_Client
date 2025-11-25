@@ -149,23 +149,7 @@ export default function HotelAdmin() {
   useEffect(() => {
     fetchHotels();
   }, []);
-
-// Load existing Cloudinary images into previews when editing
-useEffect(() => {
-  if (!open || !editMode) return;
-
-  const newPreviews = {};
-  for (let i = 1; i <= 5; i++) {
-    const key = `image${i}`;
-    if (form[key]) {
-      newPreviews[key] = form[key]; // Cloudinary URL
-    }
-  }
-  setPreviews(newPreviews);
-
-}, [open, editMode, form]);
-
-
+  
 
   const fetchHotelsByLocation = async () => {
     if (!searchLocation.trim()) {
@@ -351,39 +335,18 @@ useEffect(() => {
     }
   };
 
-  // const handleImageChange = (e, key) => {
-  //   const file = e.target.files[0];
-  //   setImages({ ...images, [key]: file });
-
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setPreviews((prev) => ({ ...prev, [key]: reader.result }));
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-
   const handleImageChange = (e, key) => {
-  const file = e.target.files[0];
+    const file = e.target.files[0];
+    setImages({ ...images, [key]: file });
 
-  setImages((prev) => ({
-    ...prev,
-    [key]: file, // store File object for upload
-  }));
-
-  if (file) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviews((prev) => ({
-        ...prev,
-        [key]: reader.result, // show local preview
-      }));
-    };
-    reader.readAsDataURL(file);
-  }
-};
-
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviews((prev) => ({ ...prev, [key]: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!form.name || !form.location || !form.price) {
