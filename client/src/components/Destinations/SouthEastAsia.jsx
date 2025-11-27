@@ -27,6 +27,7 @@ export default function SouthEastAsia() {
 
   return (
     <section className="py-14 bg-gray-50">
+
       {/* Heading */}
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
@@ -43,11 +44,14 @@ export default function SouthEastAsia() {
           <div
             className="flex transition-transform duration-500"
             style={{
-              transform: `translateX(-${currentIndex * 276}px)`, 
+              transform: `translateX(-${currentIndex * 276}px)`,
             }}
           >
             {destinations.map((item) => (
-              <div className="w-[260px] h-[207px] mr-4 rounded-xl overflow-hidden shadow-lg relative flex-shrink-0">
+              <div
+                key={item.id}  // <-- FIXED: unique key
+                className="w-[260px] h-[207px] mr-4 rounded-xl overflow-hidden shadow-lg relative flex-shrink-0"
+              >
                 <img
                   src={item.image}
                   alt={`Destination ${item.id}`}
@@ -60,6 +64,7 @@ export default function SouthEastAsia() {
 
         {/* Navigation */}
         <div className="flex justify-center items-center mt-5 space-x-3">
+          
           {/* Prev Button */}
           <Button
             onClick={prevSlide}
@@ -72,13 +77,14 @@ export default function SouthEastAsia() {
 
           {/* Dash + Dots */}
           <div className="flex items-center space-x-2">
+
             {/* Red dash */}
             <span className="w-6 h-1 bg-red-500 rounded-full"></span>
 
-            {/* Fixed red dots  */}
+            {/* Fixed red dots */}
             {Array.from({ length: 3 }).map((_, idx) => (
               <span
-                key={idx}
+                key={idx}  // <-- Already correct
                 className="h-2 w-2 rounded-full bg-red-500"
               />
             ))}

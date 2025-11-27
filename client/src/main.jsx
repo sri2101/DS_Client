@@ -28,6 +28,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 // Admin Pages
 import AdminPage from "./pages/HotelAdmin/AdminPage.jsx";
+import Contact from "./pages/Contact/Contact";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
       { path: "/destinations-overview/:slug", element: <DestinationOverview /> },
       { path: "/destination-details/:packageSlug", element: <DestinationDetails /> },
       { path: "/compare-packages", element: <ComparePackages /> },
+      {path:"/contact", element: <Contact />},
 
       // 🔒 Admin Dashboard (Sidebar with Hotels & Packages)
       {

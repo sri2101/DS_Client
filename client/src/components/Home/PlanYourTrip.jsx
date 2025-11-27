@@ -1,137 +1,5 @@
-// "use client";
-
-// import { useState } from "react";
-// import { MessageSquare } from "lucide-react";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
-// import { cn } from "@/lib/utils";
-
-// export default function PlanYourTrip() {
-//   const [adult, setAdult] = useState(2);
-//   const [child, setChild] = useState(0);
-//   const [infant, setInfant] = useState(0);
-
-//   const increment = (setter, value) => setter(value + 1);
-//   const decrement = (setter, value) => {
-//     if (value > 0) setter(value - 1);
-//   };
-
-//   return (
-//     <Dialog>
-//       {/* Floating Button Trigger */}
-//       <DialogTrigger asChild>
-//         <button
-//           className={cn(
-//             "fixed bottom-6 right-6 flex items-center gap-2 bg-white shadow-lg border border-orange-200 text-black px-4 py-2 rounded-full hover:shadow-xl transition-all z-50"
-//           )}
-//         >
-//           <MessageSquare className="text-orange-500" size={18} />
-//           <span className="font-semibold">Plan Your Trip</span>
-//         </button>
-//       </DialogTrigger>
-
-//       {/* Dialog Content */}
-//       <DialogContent
-//         className={cn(
-//           // ✅ Mobile bottom sheet
-//           "sm:rounded-lg sm:max-w-lg sm:top-1/2 sm:-translate-y-1/2",
-//           "fixed bottom-0 inset-x-0 h-[90%] sm:h-auto sm:relative sm:inset-auto sm:translate-y-0",
-//           "overflow-y-auto"
-//         )}
-//       >
-//         <DialogHeader>
-//           <DialogTitle className="text-lg font-semibold">
-//             Want To Go For A Memorable Holiday?
-//           </DialogTitle>
-//         </DialogHeader>
-
-//         {/* Form */}
-//         <form className="space-y-3">
-//           <input
-//             type="text"
-//             placeholder="Package Name / Destination Name"
-//             className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-//           />
-
-//           <div className="grid grid-cols-2 gap-3">
-//             <input type="date" className="w-full border rounded-md px-3 py-2" />
-//             <input
-//               type="text"
-//               placeholder="City of Departure"
-//               className="w-full border rounded-md px-3 py-2"
-//             />
-//           </div>
-
-//           <div className="grid grid-cols-2 gap-3">
-//             <input
-//               type="text"
-//               placeholder="Your Name"
-//               className="w-full border rounded-md px-3 py-2"
-//             />
-//             <input
-//               type="tel"
-//               placeholder="Mobile No."
-//               className="w-full border rounded-md px-3 py-2"
-//             />
-//           </div>
-
-//           <input
-//             type="email"
-//             placeholder="Your E-mail Address"
-//             className="w-full border rounded-md px-3 py-2"
-//           />
-
-//           {/* Travellers Counter */}
-//           <div className="grid grid-cols-3 gap-2 text-center">
-//             {[
-//               { label: "Adult", value: adult, setter: setAdult },
-//               { label: "Child", value: child, setter: setChild },
-//               { label: "Infant", value: infant, setter: setInfant },
-//             ].map(({ label, value, setter }) => (
-//               <div key={label}>
-//                 <label className="block text-sm mb-1">{label}</label>
-//                 <div className="flex items-center justify-center gap-2">
-//                   <button
-//                     type="button"
-//                     onClick={() => decrement(setter, value)}
-//                     className="w-8 h-8 flex items-center justify-center border rounded-full text-lg hover:bg-gray-100"
-//                   >
-//                     −
-//                   </button>
-//                   <span className="w-6 text-center">{value}</span>
-//                   <button
-//                     type="button"
-//                     onClick={() => increment(setter, value)}
-//                     className="w-8 h-8 flex items-center justify-center border rounded-full text-lg hover:bg-gray-100"
-//                   >
-//                     +
-//                   </button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-
-//           {/* Submit Button */}
-//           <button
-//             type="submit"
-//             className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700"
-//           >
-//             Enquire Now
-//           </button>
-//         </form>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
-
-
 import React, { useState } from "react";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, MapPin, Calendar as CalendarIcon, User, Phone, Mail } from "lucide-react";
 import {
   Dialog,
   DialogTrigger,
@@ -141,16 +9,18 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 export default function PlanYourTrip() {
   const [open, setOpen] = useState(false);
 
-  // form state
   const [adult, setAdult] = useState(2);
   const [child, setChild] = useState(0);
   const [infant, setInfant] = useState(0);
+
   const [packageName, setPackageName] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [departureCity, setDepartureCity] = useState("");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -159,214 +29,220 @@ export default function PlanYourTrip() {
   const increment = (setter, value) => setter(value + 1);
   const decrement = (setter, value) => value > 0 && setter(value - 1);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    // TODO: send form to API / service
-    // close dialog after submit
-    setOpen(false);
-    // optional: show toast or feedback here
-    // alert("Enquiry submitted");
-  };
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   setOpen(false);
+  // };
+  const onSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+      // const res = await fetch("http://localhost:3000/api/v1/trip/submit", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/v1/trip/submit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        packageName,
+        date: date ? date.toISOString().split("T")[0] : "",
+        departureCity,
+        name,
+        mobile,
+        email,
+        adult,
+        child,
+        infant,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Enquiry Sent Successfully!");
+      setOpen(false);
+    } else {
+      alert(data.message || "Error submitting enquiry");
+    }
+  } catch (error) {
+    alert("Server not reachable");
+    console.error(error);
+  }
+};
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* Floating Button Trigger */}
       <DialogTrigger asChild>
         <button
-          aria-label="Plan your trip"
-          className={cn(
-            "fixed bottom-6 right-6 z-50 flex items-center gap-2",
-            "bg-white border border-orange-200 text-black shadow-lg px-4 py-2 rounded-full",
-            "hover:shadow-xl transition-all"
-          )}
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-white border border-orange-200 shadow-xl px-4 py-2 rounded-full hover:shadow-2xl transition"
         >
           <MessageSquare className="text-orange-500" size={18} />
           <span className="font-semibold">Plan Your Trip</span>
         </button>
       </DialogTrigger>
 
-      {/* Single DialogContent that adapts responsively */}
-      {/* <DialogContent
-        className={cn(
-          // base
-          "bg-white z-50 overflow-y-auto shadow-lg",
-          // mobile bottom sheet
-          "fixed inset-x-0 bottom-0 h-[90%] rounded-t-lg p-5",
-          // desktop centered modal (overrides mobile positioning)
-          "sm:inset-auto sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-lg sm:h-auto sm:rounded-lg sm:p-6"
-        )}
-      > */}
-      {/* <DialogContent
-        className={cn(
-          // base
-          "bg-white z-50 overflow-y-auto shadow-lg",
-          // mobile bottom sheet
-          "fixed inset-x-0 bottom-0 h-[90%] rounded-t-lg p-5",
-          // desktop centered modal (>=768px)
-          "md:inset-auto md:bottom-auto md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-lg md:h-auto md:rounded-lg md:p-6"
-        )}
-      > */}
       <DialogContent
         className={cn(
-          "bg-white z-50 overflow-y-auto shadow-lg p-5 rounded-lg",
-          "fixed inset-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-lg w-[90%] h-[60%] no-scrollbar",
+          "bg-white rounded-xl shadow-xl p-6 border border-gray-100",
+          "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+          "w-[92%] md:w-[720px] !max-w-[720px]",   // slightly smaller + natural width
+          "max-h-[78vh] overflow-y-auto"          // gives enough height to fit form
         )}
       >
 
-
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-center">
+          <DialogTitle className="text-xl font-semibold text-center text-gray-800">
             Want To Go For A Memorable Holiday?
           </DialogTitle>
-
-          {/* fixes aria-describedby warning */}
-          <DialogDescription id="plan-trip-desc" className="sr-only">
-            Fill the form below to enquire about packages or destinations.
-          </DialogDescription>
         </DialogHeader>
 
-        <form aria-describedby="plan-trip-desc" onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={onSubmit} className="space-y-5 mt-3">
+
+          {/* PACKAGE NAME */}
           <div>
-            <label className="sr-only" htmlFor="package">
-              Package or Destination
-            </label>
-            <input
-              id="package"
-              value={packageName}
-              onChange={(e) => setPackageName(e.target.value)}
-              type="text"
-              placeholder="Package Name / Destination Name"
-              className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="sr-only" htmlFor="date">
-                Travel Date
-              </label>
+            <label className="text-sm font-medium text-gray-700 mb-1">Destination</label>
+            <div className="relative">
               <input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full border rounded-md px-3 py-2"
-              />
-            </div>
+                value={packageName}
+                onChange={(e) => setPackageName(e.target.value)}
+                placeholder="Package Name / Destination Name"
+                className="w-full border border-[#BBD7FF] rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#C6DEFF]"
 
-            <div>
-              <label className="sr-only" htmlFor="departure">
-                City of Departure
-              </label>
-              <input
-                id="departure"
-                type="text"
-                value={departureCity}
-                onChange={(e) => setDepartureCity(e.target.value)}
-                placeholder="City of Departure"
-                className="w-full border rounded-md px-3 py-2"
               />
+              <MapPin className="absolute right-3 top-3.5 text-[#9AA6B2]" size={20} />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          {/* DATE & CITY */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Date Picker */}
             <div>
-              <label className="sr-only" htmlFor="name">
-                Your Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your Name"
-                className="w-full border rounded-md px-3 py-2"
-              />
-            </div>
+              <label className="text-sm font-medium text-gray-700 mb-1">Date of Departure</label>
 
-            <div>
-              <label className="sr-only" htmlFor="mobile">
-                Mobile No.
-              </label>
-              <input
-                id="mobile"
-                type="tel"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                placeholder="Mobile No."
-                className="w-full border rounded-md px-3 py-2"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="sr-only" htmlFor="email">
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your E-mail Address"
-              className="w-full border rounded-md px-3 py-2"
-            />
-          </div>
-
-          {/* Travellers Counter */}
-          <div className="grid grid-cols-3 gap-3 text-center">
-            {[
-              { label: "Adult", value: adult, setter: setAdult },
-              { label: "Child", value: child, setter: setChild },
-              { label: "Infant", value: infant, setter: setInfant },
-            ].map(({ label, value, setter }) => (
-              <div key={label}>
-                <div className="text-sm mb-1">{label}</div>
-                <div className="flex items-center justify-center gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
                   <button
                     type="button"
-                    aria-label={`Decrease ${label}`}
-                    onClick={() => decrement(setter, value)}
-                    className="w-8 h-8 flex items-center justify-center border rounded-full text-lg hover:bg-gray-100"
+                    className="relative w-full text-left border-[1.8px] border-[#D6E4FF] rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring focus:ring-[#C7D9FF]"
                   >
-                    −
+                    {date ? (
+                      <span className="text-gray-800">{date.toDateString()}</span>
+                    ) : (
+                      <span className="text-gray-500">Select Date</span>
+                    )}
+                    <CalendarIcon size={20} className="absolute right-3 top-3.5 text-[#9AA6B2]" />
                   </button>
+                </PopoverTrigger>
 
-                  <span className="w-8 text-center" aria-live="polite">
-                    {value}
-                  </span>
+                <PopoverContent className="p-0 bg-white rounded-xl shadow-lg border border-gray-100">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(d) => setDate(d)}
+                    className="rounded-md"
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
 
-                  <button
-                    type="button"
-                    aria-label={`Increase ${label}`}
-                    onClick={() => increment(setter, value)}
-                    className="w-8 h-8 flex items-center justify-center border rounded-full text-lg hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1">City of Departure</label>
+              <div className="relative">
+                <input
+                  value={departureCity}
+                  onChange={(e) => setDepartureCity(e.target.value)}
+                  placeholder="City of Departure"
+                  className="w-full border-[1.8px] border-[#D6E4FF] rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring focus:ring-[#C7D9FF]"
+                />
+                <MapPin className="absolute right-3 top-3.5 text-[#9AA6B2]" size={20} />
               </div>
-            ))}
+            </div>
           </div>
 
-          <div>
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700"
-            >
-              Enquire Now
-            </button>
+          {/* NAME & PHONE */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1">Name</label>
+              <div className="relative">
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your Name"
+                  className="w-full border-[1.8px] border-[#D6E4FF] rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring focus:ring-[#C7D9FF]"
+                />
+                <User className="absolute right-3 top-3.5 text-[#9AA6B2]" size={20} />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+              <div className="relative">
+                <input
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  placeholder="Mobile No."
+                  className="w-full border-[1.8px] border-[#D6E4FF] rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring focus:ring-[#C7D9FF]"
+                />
+                <Phone className="absolute right-3 top-3.5 text-[#9AA6B2]" size={20} />
+              </div>
+            </div>
           </div>
+
+          {/* EMAIL */}
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1">Email ID</label>
+            <div className="relative">
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your E-mail Address"
+                className="w-full border-[1.8px] border-[#D6E4FF] rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring focus:ring-[#C7D9FF]"
+              />
+              <Mail className="absolute right-3 top-3.5 text-[#9AA6B2]" size={20} />
+            </div>
+          </div>
+
+          {/* COUNTERS */}
+          <div className="grid grid-cols-3 gap-4 text-center">
+            {[{ label: "Adult", value: adult, setter: setAdult },
+            { label: "Child", value: child, setter: setChild },
+            { label: "Infant", value: infant, setter: setInfant }]
+              .map(({ label, value, setter }) => (
+                <div key={label}>
+                  <div className="text-sm font-medium text-gray-700 mb-1">{label}</div>
+
+                  <div className="flex items-center justify-center gap-3 border-[1.8px] border-[#D6E4FF] rounded-xl py-2 bg-white">
+                    <button
+                      type="button"
+                      onClick={() => decrement(setter, value)}
+                      className="w-6 h-6 flex items-center justify-center rounded-full text-lg border border-gray-300 hover:bg-gray-100"
+                    >
+                      −
+                    </button>
+
+                    <span className="w-8 text-center text-gray-800">{value}</span>
+
+                    <button
+                      type="button"
+                      onClick={() => increment(setter, value)}
+                      className="w-6 h-6 flex items-center justify-center rounded-full text-lg border border-gray-300 hover:bg-gray-100"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
+
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            className="w-full bg-[#3A7DFF] text-white py-3 rounded-xl text-lg font-semibold hover:bg-[#316ee0] transition"
+          >
+            Enquire Now
+          </button>
+
         </form>
       </DialogContent>
     </Dialog>
   );
-}
-
-// helper functions used above
-function increment(setter, value) {
-  setter(value + 1);
-}
-function decrement(setter, value) {
-  if (value > 0) setter(value - 1);
 }

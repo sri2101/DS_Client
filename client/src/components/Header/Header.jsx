@@ -116,7 +116,11 @@ function Header() {
             {/* Customer Service */}
             <div className="relative">
               <button
-                onClick={() => setShowSupport(!showSupport)}
+                onClick={() => {
+                  setShowSupport(!showSupport);
+                  setShowSettings(false); // CLOSE settings popup
+                }}
+
                 className="text-[10px] text-gray-600 flex items-center gap-1 border rounded px-1 py-[1px] hover:bg-gray-50"
               >
                 <Headphones size={12} className="text-blue-500" />
@@ -146,7 +150,11 @@ function Header() {
 
             {/* Country Selector */}
             <button
-              onClick={() => setShowSettings(!showSettings)}
+              onClick={() => {
+                setShowSettings(!showSettings);
+                setShowSupport(false); // CLOSE support popup
+              }}
+
               className="text-[10px] text-gray-600 flex items-center gap-1 border rounded px-1 py-[1px] hover:bg-gray-50"
             >
               <img
@@ -158,42 +166,42 @@ function Header() {
             </button>
           </div>
 
-            {/* Login / Signup (bigger below) */}
-            {user ? (
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-700">{user.fullname || user.email}</span>
-                <button
-                  onClick={async () => {
-                    try {
-                      const token = localStorage.getItem('token');
-                      if (token) {
-                        // attempt server logout (best-effort)
-                        await fetch('/api/v1/user/logout', {
-                          method: 'POST',
-                          headers: {
-                            Authorization: `Bearer ${token}`,
-                          },
-                        });
-                      }
-                    } catch (e) {
-                      console.error('logout error', e);
+          {/* Login / Signup (bigger below) */}
+          {user ? (
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-700">{user.fullname || user.email}</span>
+              <button
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem('token');
+                    if (token) {
+                      // attempt server logout (best-effort)
+                      await fetch('/api/v1/user/logout', {
+                        method: 'POST',
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      });
                     }
-                    dispatch(logoutUser());
-                    localStorage.removeItem('token');
-                    navigate('/', { replace: true });
-                  }}
-                  className="bg-gray-100 text-gray-800 px-3 py-1.5 rounded-full text-sm font-semibold cursor-pointer"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <Link to={"/auth"}>
-                <button className="bg-blue-500 text-white px-3 py-1.5 rounded-full text-sm font-semibold cursor-pointer">
-                  Login / Signup
-                </button>
-              </Link>
-            )}
+                  } catch (e) {
+                    console.error('logout error', e);
+                  }
+                  dispatch(logoutUser());
+                  localStorage.removeItem('token');
+                  navigate('/', { replace: true });
+                }}
+                className="bg-gray-100 text-gray-800 px-3 py-1.5 rounded-full text-sm font-semibold cursor-pointer"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link to={"/auth"}>
+              <button className="bg-blue-500 text-white px-3 py-1.5 rounded-full text-sm font-semibold cursor-pointer">
+                Login / Signup
+              </button>
+            </Link>
+          )}
         </div>
 
 
