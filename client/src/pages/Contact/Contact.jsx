@@ -347,7 +347,7 @@ export default function ContactPage() {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE}/api/inquiry`,
+        `${import.meta.env.VITE_API_BASE}/api/v1/contact/inquiry`,
     // const response = await fetch("http://localhost:3000/api/v1/contact/inquiry", 
         {
           method: "POST",
