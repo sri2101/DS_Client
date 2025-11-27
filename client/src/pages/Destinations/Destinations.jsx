@@ -5,6 +5,7 @@ import EuropeTravel from "@/components/Destinations/EuropeTravel"
 import DubaiAbudhabi from '@/components/Destinations/DubaiAbhudabi'
 import SouthEastAsia from '@/components/Destinations/SouthEastAsia'
 import TravelVibe from '@/components/Destinations/TravelVibe'
+import PlanYourTrip from '@/components/Home/PlanYourTrip'
 
 function Destinations() {
   return (
@@ -26,6 +27,9 @@ function Destinations() {
       </section>
       <section>
         <TravelVibe />
+      </section>
+      <section>
+        <PlanYourTrip />
       </section>
     </div>
   )

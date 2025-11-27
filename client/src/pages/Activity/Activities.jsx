@@ -4,6 +4,7 @@ import IndianActivities from '@/components/Activity/IndianActivities'
 import InternationalActivities from '@/components/Activity/InternationalActivities'
 import PopularActivities from '@/components/Activity/PopularActivities'
 import WhyBook from '@/components/Activity/WhyBook'
+import PlanYourTrip from '@/components/Home/PlanYourTrip'
 
 function Activities() {
   return (
@@ -22,6 +23,9 @@ function Activities() {
       </section>
       <section className='py-4'>
         <WhyBook />
+      </section>
+      <section>
+        <PlanYourTrip />
       </section>
     </div>
   )

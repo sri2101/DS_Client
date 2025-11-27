@@ -3,6 +3,7 @@ import HotelDeals from '@/components/HotelsIntro/HotelDeals'
 import PopularDestinations from '@/components/HotelsIntro/PopularDestinations'
 import WhyBookHotels from '@/components/HotelsIntro/WhyBookHotels'
 import React from 'react'
+import PlanYourTrip from '@/components/Home/PlanYourTrip'
 
 function HotelsIntro() {
   return (
@@ -18,6 +19,9 @@ function HotelsIntro() {
       </section>
       <section>
         <WhyBookHotels />
+      </section>
+      <section>
+        <PlanYourTrip />
       </section>
     </div>
   )
