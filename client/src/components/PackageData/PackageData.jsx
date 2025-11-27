@@ -166,7 +166,7 @@ const tripPackages = [
     tag: "Land Only",
     location: "3N Kuta | 2N Nusa Dua",
     images: [
-      "https://tse1.mm.bing.net/th/id/OIP.tY88HMitnfBsmMjDSR2ovQHaEM?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "https://media.easemytrip.com/media/Deal/DL638865401886206293/SightSeeing/SightSeeingIKSX1z.png",
       "https://media.easemytrip.com/media/Deal/DL638865401886206293/SightSeeing/SightSeeingIKSX1z.png",
       "https://media.easemytrip.com/media/Deal/DL638865401886206293/SightSeeing/SightSeeingSfBq1H.png",
       "https://media.easemytrip.com/media/Deal/DL638865401886206293/SightSeeing/SightSeeing5bGpqM.png"
