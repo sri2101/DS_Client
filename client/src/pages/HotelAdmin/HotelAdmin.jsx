@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import {
   Dialog,
   DialogContent,
@@ -75,11 +76,11 @@ export default function HotelAdmin() {
   const [facilities, setFacilities] = useState([]);
   const [amenities, setAmenities] = useState([]);
   const [description, setDescription] = useState([]);
-  
+
   const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "");
 
   const PREDEFINED_FACILITIES = [
-    { key: "freeWifi", label: "Free Wi-Fi", icon: "📶" },
+    { key: "freeWifi", label: "Free Wi-Fi", icon: "🛜" },
     { key: "airportShuttle", label: "Airport Shuttle", icon: "🚐" },
     { key: "dailyHousekeeping", label: "Daily Housekeeping", icon: "🧹" },
     { key: "freeParking", label: "Free Parking", icon: "🅿️" },
@@ -102,7 +103,7 @@ export default function HotelAdmin() {
     { key: "centralAC", label: "Central AC", icon: "🌬️" },
     { key: "luggageStorage", label: "Luggage Storage", icon: "🧳" },
     { key: "ironingFacilities", label: "Ironing Facilities", icon: "👔" },
-    { key: "freeWiFi", label: "Free WiFi", icon: "📶" },
+    { key: "freeWiFi", label: "Free WiFi", icon: "🛜" },
     { key: "powerBackup", label: "Power Backup", icon: "⚡" },
     { key: "elevator", label: "Elevator", icon: "🛗" },
     { key: "security24Hour", label: "Security [24-hour]", icon: "🔒" },
@@ -117,7 +118,28 @@ export default function HotelAdmin() {
     { key: "photocopying", label: "Photocopying", icon: "🖨️" },
     { key: "coffeeShop", label: "Coffee Shop", icon: "☕" },
   ];
-  
+
+  // Helper function to get the correct emoji for an amenity
+  const getAmenityIcon = (amenityName) => {
+    if (!amenityName) return "🏨";
+
+    // Check facilities first
+    const facility = PREDEFINED_FACILITIES.find(
+      f => f.label.toLowerCase() === amenityName.toLowerCase() ||
+        f.key.toLowerCase() === amenityName.toLowerCase()
+    );
+    if (facility) return facility.icon;
+
+    // Check amenities
+    const amenity = PREDEFINED_AMENITIES.find(
+      a => a.label.toLowerCase() === amenityName.toLowerCase() ||
+        a.key.toLowerCase() === amenityName.toLowerCase()
+    );
+    if (amenity) return amenity.icon;
+
+    // Fallback to generic icon
+    return "🏨";
+  };
 
   const fetchHotels = async () => {
     try {
@@ -136,7 +158,7 @@ export default function HotelAdmin() {
         if (!Array.isArray(amenities)) {
           amenities = [];
         }
-        
+
         return { ...h, _id: h._id || h.id, amenities };
       });
       setHotels(data);
@@ -149,14 +171,14 @@ export default function HotelAdmin() {
   useEffect(() => {
     fetchHotels();
   }, []);
-  
+
 
   const fetchHotelsByLocation = async () => {
     if (!searchLocation.trim()) {
       setFilteredHotels(hotels);
       return;
     }
-    
+
     try {
       setError(null);
       const res = await axios.get(`${API_BASE}/api/v1/hotel/location/${searchLocation}`, {
@@ -174,7 +196,7 @@ export default function HotelAdmin() {
         if (!Array.isArray(amenities)) {
           amenities = [];
         }
-        
+
         return { ...h, _id: h._id || h.id, amenities };
       });
       setFilteredHotels(data);
@@ -264,10 +286,10 @@ export default function HotelAdmin() {
         freeParking: hotel.freeParking || false,
         freeCancellation: hotel.freeCancellation || false,
       });
-      
+
       setFacilities(Array.isArray(hotel.facilities) ? hotel.facilities : []);
       setAmenities(Array.isArray(hotel.amenities) ? hotel.amenities : []);
-      
+
       let hotelDescription = [];
       if (Array.isArray(hotel.description) && hotel.description.length > 0) {
         hotelDescription = hotel.description.map(d => ({
@@ -276,7 +298,7 @@ export default function HotelAdmin() {
         }));
       }
       setDescription(hotelDescription);
-      
+
       setEditMode(true);
       setSelectedId(hotel._id);
 
@@ -295,9 +317,9 @@ export default function HotelAdmin() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm({ 
-      ...form, 
-      [name]: type === 'checkbox' ? checked : value 
+    setForm({
+      ...form,
+      [name]: type === 'checkbox' ? checked : value
     });
   };
 
@@ -353,7 +375,7 @@ export default function HotelAdmin() {
       alert("Please fill all required fields: name, location, and price");
       return;
     }
-    
+
     try {
       setLoading(true);
       const formData = new FormData();
@@ -367,7 +389,7 @@ export default function HotelAdmin() {
 
       const validFacilities = facilities.filter(f => f && f.trim() !== '');
       const validAmenities = amenities.filter(a => a && a.trim() !== '');
-      
+
       const validDescription = description
         .filter(d => {
           const hasPlace = d.place && d.place.trim() !== '';
@@ -378,7 +400,7 @@ export default function HotelAdmin() {
           place: d.place.trim(),
           info: d.info.filter(i => i && i.trim() !== '').map(i => i.trim())
         }));
-      
+
       formData.append('facilities', JSON.stringify(validFacilities));
       formData.append('amenities', JSON.stringify(validAmenities));
       formData.append('description', JSON.stringify(validDescription));
@@ -393,10 +415,10 @@ export default function HotelAdmin() {
 
       const method = editMode ? "put" : "post";
 
-//  const method = editMode ? "post" : "post"; // both POST
-// const url = editMode
-//   ? `${API_BASE}/api/v1/hotel/${selectedId}`
-//   : `${API_BASE}/api/v1/hotel/create`;
+      //  const method = editMode ? "post" : "post"; // both POST
+      // const url = editMode
+      //   ? `${API_BASE}/api/v1/hotel/${selectedId}`
+      //   : `${API_BASE}/api/v1/hotel/create`;
 
 
 
@@ -410,11 +432,20 @@ export default function HotelAdmin() {
       await fetchHotels();
       setOpen(false);
       resetForm();
-      
+
+      // Show success toast
+      toast.success(editMode ? "Hotel updated successfully! ✅" : "Hotel created successfully! ✅", {
+        duration: 3000,
+        position: "top-center",
+      });
+
     } catch (err) {
       console.error("Save failed:", err.response?.data || err.message || err);
       const errorMessage = err.response?.data?.message || err.message || "Failed to save hotel";
-      alert(`Error: ${errorMessage}`);
+      toast.error(`Error: ${errorMessage}`, {
+        duration: 4000,
+        position: "top-center",
+      });
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -428,9 +459,16 @@ export default function HotelAdmin() {
         headers: { Authorization: `Bearer ${token}` },
       });
       await fetchHotels();
+      toast.success("Hotel deleted successfully! 🗑️", {
+        duration: 3000,
+        position: "top-center",
+      });
     } catch (err) {
       console.error("Delete failed:", err.response?.data || err.message);
-      alert("Failed to delete hotel");
+      toast.error("Failed to delete hotel", {
+        duration: 4000,
+        position: "top-center",
+      });
     }
   };
 
@@ -449,7 +487,7 @@ export default function HotelAdmin() {
         }
         .image-zoom:hover { transform: scale(1.06); filter: brightness(.98); }
       `}</style>
-      
+
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
         <h1 className="text-3xl font-bold text-[#4b3fb3] tracking-tight">
           🏨 Hotel Management
@@ -481,7 +519,7 @@ export default function HotelAdmin() {
           {error}
         </div>
       )}
- 
+
       {filteredHotels.length === 0 ? (
         <p className="text-center text-gray-500">No hotels found.</p>
       ) : (
@@ -504,13 +542,13 @@ export default function HotelAdmin() {
                     📍 {hotel.location}
                   </div>
                 </div>
- 
+
                 <CardHeader className="px-4 pt-4 pb-2">
                   <CardTitle className="text-lg font-semibold text-[#2b2b2b]">
                     {hotel.name}
                   </CardTitle>
                 </CardHeader>
- 
+
                 <CardContent className="space-y-2 flex-1 px-4 pb-4">
                   <p className="text-sm text-gray-600 line-clamp-2">
                     {hotel.descriptionAboutHotel}
@@ -524,7 +562,7 @@ export default function HotelAdmin() {
                       ₹{hotel.price}
                     </span>
                   </p>
- 
+
                   <div className="mt-3 border-t pt-3">
                     <div className="flex flex-wrap gap-2">
                       {(Array.isArray(hotel?.amenities) ? hotel.amenities : [])
@@ -534,13 +572,13 @@ export default function HotelAdmin() {
                             key={index}
                             className="inline-flex items-center gap-2 px-2 py-1 rounded-full bg-[#eef2ff] text-xs font-medium text-[#2b2b2b]"
                           >
-                            <span className="text-sm">🏨</span>
+                            <span className="text-sm">{getAmenityIcon(amenity)}</span>
                             <span>{amenity}</span>
                           </span>
                         ))}
                     </div>
                   </div>
- 
+
                   <div className="flex justify-between items-center pt-4">
                     <Button
                       variant="outline"
@@ -563,7 +601,7 @@ export default function HotelAdmin() {
           ))}
         </div>
       )}
- 
+
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl">
           <DialogHeader>
@@ -571,7 +609,7 @@ export default function HotelAdmin() {
               {editMode ? "Edit Hotel" : "Add New Hotel"}
             </DialogTitle>
           </DialogHeader>
- 
+
           <div className="space-y-6 mt-4">
             <div className="space-y-3">
               <h3 className="text-lg font-semibold text-[#4b3fb3]">🏨 Basic Information</h3>
@@ -581,6 +619,7 @@ export default function HotelAdmin() {
                 value={form.name}
                 onChange={handleChange}
                 required
+                className="focus-visible:ring-[#7B8EDD] [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:text-black [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white]"
               />
               <div className="grid grid-cols-2 gap-3">
                 <Input
@@ -873,7 +912,7 @@ export default function HotelAdmin() {
                         Remove Section
                       </Button>
                     </div>
-                    
+
                     <div className="space-y-2">
                       {desc.info.map((info, infoIndex) => (
                         <div key={infoIndex} className="flex gap-2">
@@ -897,7 +936,7 @@ export default function HotelAdmin() {
                         </div>
                       ))}
                     </div>
-                    
+
                     <Button
                       type="button"
                       variant="outline"

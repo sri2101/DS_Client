@@ -3,14 +3,16 @@ import Footer from './components/Footer/Footer.jsx'
 import Header from './components/Header/Header.jsx'
 import { Outlet } from "react-router-dom"
 import ScrollToTop from './components/ScrollToTop.jsx'
+import { Toaster } from 'react-hot-toast'
 
-function App() {  
+function App() {
   return (
     <div>
       <Header />
-      <ScrollToTop /> 
+      <ScrollToTop />
       <Outlet />
       <Footer />
+      <Toaster />
     </div>
   )
 }

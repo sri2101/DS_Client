@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import {
   Dialog,
   DialogContent,
@@ -183,7 +184,7 @@ export default function PackageAdmin() {
       if (typeof v !== 'string') return v;
       let s = v.trim();
       if (!s) return s;
-      try { s = s.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); } catch (e) {}
+      try { s = s.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); } catch (e) { }
       if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) s = s.slice(1, -1);
       try { return JSON.parse(s); } catch (e) { return v; }
     };
@@ -293,10 +294,10 @@ export default function PackageAdmin() {
             try {
               const parsed = JSON.parse(pkg.themes);
               if (Array.isArray(parsed)) return parsed.map(String);
-            } catch (e) {}
+            } catch (e) { }
             return String(pkg.themes).split(',').map(s => s.trim()).filter(Boolean);
           }
-        } catch (e) {}
+        } catch (e) { }
         return [];
       })()
     );
@@ -308,10 +309,10 @@ export default function PackageAdmin() {
           try {
             const parsed = JSON.parse(pkg.inclusions);
             if (Array.isArray(parsed)) return parsed.map(String);
-          } catch (e) {}
+          } catch (e) { }
           return String(pkg.inclusions).split(',').map(s => s.trim()).filter(Boolean);
         }
-      } catch (e) {}
+      } catch (e) { }
       return [];
     });
     setExclusionsArray(() => {
@@ -321,10 +322,10 @@ export default function PackageAdmin() {
           try {
             const parsed = JSON.parse(pkg.exclusions);
             if (Array.isArray(parsed)) return parsed.map(String);
-          } catch (e) {}
+          } catch (e) { }
           return String(pkg.exclusions).split(',').map(s => s.trim()).filter(Boolean);
         }
-      } catch (e) {}
+      } catch (e) { }
       return [];
     });
     if (Array.isArray(pkg.itinerary)) {
@@ -455,14 +456,14 @@ export default function PackageAdmin() {
     setThemesArray([]);
     setThemeInput("");
     setItineraryEditor([]);
-  setPriceDetailsEditor({ originalPrice: "", discountedPrice: "", emiOptions: { noCostPlans: [], standardPlans: [] } });
+    setPriceDetailsEditor({ originalPrice: "", discountedPrice: "", emiOptions: { noCostPlans: [], standardPlans: [] } });
     setInclusionsArray([]);
     setExclusionsArray([]);
     setCustomInclusion("");
     setCustomExclusion("");
-  setAdditionalTravelValidity('');
-  setAdditionalHighlightsInput('');
-  setAdditionalHighlights([]);
+    setAdditionalTravelValidity('');
+    setAdditionalHighlightsInput('');
+    setAdditionalHighlights([]);
     setTripHighlightsArray([]);
     setContactEmail('');
     setContactPhones([]);
@@ -816,11 +817,11 @@ export default function PackageAdmin() {
         for (const pair of formData.entries()) {
           console.log('FormData entry:', pair[0], pair[1]);
         }
-      } catch (e) {}
+      } catch (e) { }
 
       for (const [key, value] of formData.entries()) {
-  console.log("FD:", key, value);
-}
+        console.log("FD:", key, value);
+      }
 
 
       await axios({
@@ -832,10 +833,20 @@ export default function PackageAdmin() {
 
       await fetchPackages();
       setOpen(false);
+
+      // Show success toast
+      toast.success(editMode ? "Package updated successfully! ✅" : "Package created successfully! ✅", {
+        duration: 3000,
+        position: "top-center",
+      });
     } catch (err) {
       console.error("Save failed:", err.response?.data || err.message);
-      alert(
-        err.response?.data?.message || err.message || "Failed to save package"
+      toast.error(
+        err.response?.data?.message || err.message || "Failed to save package",
+        {
+          duration: 4000,
+          position: "top-center",
+        }
       );
     } finally {
       setLoading(false);
@@ -850,9 +861,16 @@ export default function PackageAdmin() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPackages(packages.filter((p) => p.slug !== slug));
+      toast.success("Package deleted successfully! 🗑️", {
+        duration: 3000,
+        position: "top-center",
+      });
     } catch (err) {
       console.error("Delete failed:", err.response?.data || err.message);
-      alert(err.response?.data?.message || err.message || "Failed to delete");
+      toast.error(err.response?.data?.message || err.message || "Failed to delete", {
+        duration: 4000,
+        position: "top-center",
+      });
     }
   };
 
@@ -953,10 +971,10 @@ export default function PackageAdmin() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         {/* <DialogContent className="max-w-6xl w-full max-h-[80vh] overflow-y-auto overflow-x-hidden rounded-2xl border shadow-lg"> */}
-  <DialogContent
-    className="w-full max-w-screen-xl max-h-[90vh] overflow-auto px-6 sm:px-12 py-6 sm:py-8 rounded-2xl border shadow-lg min-w-0"
-    style={{ maxWidth: 'min(1280px, 95vw)', zIndex: 60 }}
-  >
+        <DialogContent
+          className="w-full max-w-screen-xl max-h-[90vh] overflow-auto px-6 sm:px-12 py-6 sm:py-8 rounded-2xl border shadow-lg min-w-0"
+          style={{ maxWidth: 'min(1280px, 95vw)', zIndex: 60 }}
+        >
 
           <DialogHeader className="pb-2">
             <DialogTitle className="text-2xl">
@@ -1019,19 +1037,18 @@ export default function PackageAdmin() {
                       key={t}
                       type="button"
                       onClick={() => setPackageType(selected ? "" : t)}
-                      className={`inline-flex items-center gap-2 px-6 py-2 rounded-full text-base font-medium whitespace-nowrap ${
-                        selected
+                      className={`inline-flex items-center gap-2 px-6 py-2 rounded-full text-base font-medium whitespace-nowrap ${selected
                           ? "bg-indigo-100 text-indigo-800"
                           : "bg-[#eef2ff] text-[#2b2b2b]"
-                      }`}
+                        }`}
                     >
                       <span className="text-base">{PACKAGE_TYPE_ICONS[t]}</span>
                       <span className="capitalize whitespace-nowrap">
                         {t === "groupDeparture"
                           ? "Group Departure"
                           : t === "bookNow"
-                          ? "Book Now"
-                          : "Customizable"}
+                            ? "Book Now"
+                            : "Customizable"}
                       </span>
                     </button>
                   );
@@ -1090,11 +1107,10 @@ export default function PackageAdmin() {
                         key={tp}
                         type="button"
                         onClick={() => toggleThemePreset(tp)}
-                        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-                          sel
+                        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${sel
                             ? "bg-indigo-100 text-indigo-800"
                             : "bg-[#eef2ff] text-[#2b2b2b]"
-                        }`}
+                          }`}
                       >
                         <span className="text-sm">{THEME_ICONS[tp]}</span>
                         <span className="capitalize">{tp}</span>
@@ -1189,11 +1205,10 @@ export default function PackageAdmin() {
                       key={inc}
                       type="button"
                       onClick={() => toggleInclusion(inc)}
-                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-                        inclusionsArray.includes(inc)
+                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${inclusionsArray.includes(inc)
                           ? "bg-green-100 text-green-800"
                           : "bg-[#eef2ff] text-[#2b2b2b]"
-                      }`}
+                        }`}
                     >
                       <span className="text-sm">{INCLUSION_ICONS[inc]}</span>
                       <span>{inc}</span>
@@ -1244,11 +1259,10 @@ export default function PackageAdmin() {
                       key={exc}
                       type="button"
                       onClick={() => toggleExclusion(exc)}
-                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-                        exclusionsArray.includes(exc)
+                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${exclusionsArray.includes(exc)
                           ? "bg-red-100 text-red-800"
                           : "bg-[#eef2ff] text-[#2b2b2b]"
-                      }`}
+                        }`}
                     >
                       <span className="text-sm">{EXCLUSION_ICONS[exc]}</span>
                       <span>{exc}</span>
@@ -1301,11 +1315,10 @@ export default function PackageAdmin() {
                     key={f}
                     type="button"
                     onClick={() => setFlightOption(f)}
-                    className={`px-4 py-1 rounded-full border ${
-                      form.flight === f
+                    className={`px-4 py-1 rounded-full border ${form.flight === f
                         ? "bg-indigo-600 text-white"
                         : "bg-white text-[#2b2b2b]"
-                    }`}
+                      }`}
                   >
                     {f}
                   </button>
@@ -1658,8 +1671,8 @@ export default function PackageAdmin() {
                   ? "Updating..."
                   : "Adding..."
                 : editMode
-                ? "Update Package"
-                : "Add Package"}
+                  ? "Update Package"
+                  : "Add Package"}
             </Button>
           </DialogFooter>
         </DialogContent>
